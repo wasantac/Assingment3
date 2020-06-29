@@ -20,10 +20,6 @@ class Node {
 
     }
 
-    @Override
-    public String toString() {
-        return "Node{" + "left=" + left + ", right=" + right + ", parent=" + parent + ", x=" + x + '}';
-    }
 
 }
 
@@ -79,37 +75,46 @@ public class MeldableHeap {
      * function to remove an element *
      */
     public int remove() {
-        int x = root.x;
-        root = meld(root.left, root.right);
-        if (root != null) {
-            root.parent = null;
+        try {
+            int x = root.x;
+            root = meld(root.left, root.right);
+            if (root != null) {
+                root.parent = null;
+            }
+            n--;
+            return x;
+        } catch (NullPointerException ex) {
+            return 0;
         }
-        n--;
-        return x;
     }
 
     public int remove(int u) {
-        Queue<Integer> q = new LinkedList<>();
-        int w = remove();
-        if(w != u){
-            q.add(w);
-        }
-        while (!isEmpty()) {
-            w = remove();
+
+        try {
+            Queue<Integer> q = new LinkedList<>();
+            int w = remove();
             if (w != u) {
                 q.add(w);
             }
+            while (!isEmpty()) {
+                w = remove();
+                if (w != u) {
+                    q.add(w);
+                }
+            }
+            if (q.isEmpty()) {
+                return w;
+            }
+            root = new Node(null, null, null, q.poll());
+            n = 0;
+            while (!q.isEmpty()) {
+                Node node = new Node(null, null, null, q.poll());
+                root = meld(node, root);
+            }
+            return u;
+        } catch (NullPointerException ex) {
+            return -1;
         }
-        if (q.isEmpty()) {
-            return w;
-        }
-        root = new Node(null, null, null, q.poll());
-        n = 0;
-        while (!q.isEmpty()) {
-            Node node = new Node(null, null, null, q.poll());
-            root = meld(node,root);
-        }
-        return u;
     }
 
     /**
