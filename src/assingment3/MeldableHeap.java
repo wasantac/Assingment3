@@ -66,9 +66,9 @@ public class MeldableHeap {
      */
     public void add(int x) {
         Node u = new Node(null, null, null, x);
-        root = meld(u, root);
+        root = meld(u, root); 
         root.parent = null;
-        n++;
+        n++; 
     }
 
     /**
@@ -95,30 +95,30 @@ public class MeldableHeap {
             int w = remove();
             if (w != u) {
                 q.add(w);
-            }
+            } //checks if the first node is different to the want we want to remove
             while (!isEmpty()) {
                 w = remove();
                 if (w != u) {
                     q.add(w);
                 }
-            }
+            }//removes all nodes and adds them to the queue except of node(U
             if (q.isEmpty()) {
                 return w;
-            }
-            root = new Node(null, null, null, q.poll());
-            n = 0;
+            } //if the queue is empty then we return just the root node
+            root = new Node(null, null, null, q.poll()); //sets the first node on the queue to root
+            n = 0; //sets size to 0
             while (!q.isEmpty()) {
                 Node node = new Node(null, null, null, q.poll());
                 root = meld(node, root);
-            }
-            return u;
+            } //adds the rest of nodes to the heap
+            return u; //returns the value we removed
         } catch (NullPointerException ex) {
             return -1;
         }
     }
 
     /**
-     * function to merge two nodes *
+     * function to merge two nodes because it is a meldable heap*
      */
     public Node meld(Node q1, Node q2) {
         if (q1 == null) {
@@ -140,6 +140,7 @@ public class MeldableHeap {
             q1.right.parent = q1;
         }
         return q1;
+        
     }
 
     /**
